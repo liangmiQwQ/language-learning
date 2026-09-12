@@ -1,0 +1,19 @@
+.DS_Store
+__pycache__/
+*.pyc
+.venv/
+.env
+.env.*
+!.env.example
+# Personal state and generated artifacts never belong in this public repository.
+.local/
+private/
+state/
+artifacts/
+events/
+profile.json
+*.pdf
+*.png
+*.jpg
+*.jpeg
+*.docx
