@@ -129,3 +129,50 @@ test("existing Python-format records remain unchanged and accept accuracy-only r
   assert.equal(store.show().event_counts.exercise_attempt, 0);
   for (const [path, text] of saved) assert.equal(readFileSync(path, "utf8"), text);
 });
+
+test("compact context keeps learning evidence accessible without administrative or answer payload noise", (t) => {
+  const store = setup(t);
+  const report = event(
+    "accuracy-01",
+    "self_report",
+    { material_id: "week-01", accuracy_percent: 80, question_count: null },
+    "Reported 80% accuracy.",
+  );
+  assert.equal(store.record(report).status, 0);
+  assert.equal(
+    store.record(
+      event(
+        "admin-01",
+        "note",
+        { transcript: "Long repository setup details." },
+        "Repository configured.",
+      ),
+    ).status,
+    0,
+  );
+  assert.equal(
+    store.record(
+      event("week-01", "material_created", {
+        material_id: "week-01",
+        manifest: "artifacts/week-01/manifest.json",
+        full_text: "Long workbook.",
+      }),
+    ).status,
+    0,
+  );
+  const profilePath = join(store.state, "japanese", "default", "profile.json");
+  const profile = JSON.parse(readFileSync(profilePath, "utf8"));
+  profile.current_material_id = "week-01";
+  writeFileSync(profilePath, JSON.stringify(profile));
+  const context = JSON.parse(store.run("context", "--limit", "1").stdout);
+  assert.equal(context.current_material.material_id, "week-01");
+  assert.equal(context.recent_learning.length, 1);
+  assert.equal(context.recent_learning[0].id, "accuracy-01");
+  assert.equal(context.recent_learning[0].accuracy_percent, 80);
+  assert(!JSON.stringify(context).includes("Long repository"));
+  assert(!JSON.stringify(context).includes("Long workbook"));
+  const full = JSON.parse(store.run("event", "--id", "admin-01").stdout);
+  assert.equal(full.details.transcript, "Long repository setup details.");
+  assert.equal(JSON.parse(store.run("context", "--limit", "0").stdout).recent_learning.length, 0);
+  assert.equal(store.show().events.length, 3);
+});

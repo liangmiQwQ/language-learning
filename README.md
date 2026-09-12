@@ -18,9 +18,11 @@ Personal records default to `~/.local/share/language-learning/japanese/default/`
 
 ```sh
 node skills/japanese-learning/scripts/learning-store.mjs init
-node skills/japanese-learning/scripts/learning-store.mjs show
+node skills/japanese-learning/scripts/learning-store.mjs context
 node skills/japanese-learning/scripts/learning-store.mjs record --file /path/to/event.json
 ```
+
+The default `context` view reads current preferences and a few learning summaries, leaving setup chatter and detailed evidence out until needed. Use `event --id ID` to retrieve one source record or `show` for the complete history. The [memory guide](skills/japanese-learning/references/memory.md) defines meaningful updates and preserves uncertainty.
 
 See the [record contract](skills/japanese-learning/references/records.md) for event fields and separate classmate profiles. Creating a workbook records assigned material; only actual submissions record exercise attempts. Self-reported knowledge stays separate from assessed results.
 
