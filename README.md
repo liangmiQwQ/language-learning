@@ -17,20 +17,20 @@ Ask to use `$japanese-learning` to plan the next week, make a printable handout,
 Personal records default to `~/.local/share/language-learning/japanese/default/`. Set `LANGUAGE_LEARNING_HOME` for another private location. Each learner has a profile, immutable event files and versioned artifact directories. No personal history is bundled in the repository or uploaded automatically.
 
 ```sh
-python3 skills/japanese-learning/scripts/learning_store.py init
-python3 skills/japanese-learning/scripts/learning_store.py show
-python3 skills/japanese-learning/scripts/learning_store.py record --file /path/to/event.json
+node skills/japanese-learning/scripts/learning-store.mjs init
+node skills/japanese-learning/scripts/learning-store.mjs show
+node skills/japanese-learning/scripts/learning-store.mjs record --file /path/to/event.json
 ```
 
 See the [record contract](skills/japanese-learning/references/records.md) for event fields and separate classmate profiles. Creating a workbook records assigned material; only actual submissions record exercise attempts. Self-reported knowledge stays separate from assessed results.
 
 ## Development
 
-Python 3.10+; no runtime packages are required for the record tool.
+Node.js 22+; no runtime packages are required for the record tool.
 
 ```sh
-python3 scripts/check.py
-python3 -m unittest discover -s tests -v
+node scripts/check.mjs
+node --test
 ```
 
 CI runs the same checks. Use Conventional Commits, for example `feat(japanese): add a reading practice workflow`. There is no npm package or deployment step: skill installation consumes this Git repository directly. Push changes to update the source; consumers decide when to refresh their installed copy. Create a Git tag only when a named release is useful.
