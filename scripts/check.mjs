@@ -1,13 +1,15 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { basename, dirname, extname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
-const skill = readFileSync(join(root, "skills/japanese-learning/SKILL.md"), "utf8");
-assert(skill.startsWith("---\nname: japanese-learning\ndescription: "));
-assert(/^description: .+$/m.test(skill.split("---")[1]));
+for (const name of readdirSync(join(root, "skills"))) {
+  const skill = readFileSync(join(root, "skills", name, "SKILL.md"), "utf8");
+  assert(skill.startsWith(`---\nname: ${name}\ndescription: `));
+  assert(/^description: .+$/m.test(skill.split("---")[1]));
+}
 // Include non-ignored new files so the same check also works before committing.
 const files = execFileSync(
   "git",

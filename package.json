@@ -1,5 +1,10 @@
 {
   "name": "language-learning",
+  "description": "Japanese and IELTS reading skills with printable materials, private progress records, and passage deduplication.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/liangmiQwQ/language-learning.git"
+  },
   "private": true,
   "license": "MIT",
   "type": "module",
